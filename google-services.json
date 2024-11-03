@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "342834353974",
+    "project_id": "trabalhopratica-28af4",
+    "storage_bucket": "trabalhopratica-28af4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342834353974:android:870714d528e71088b90597",
+        "android_client_info": {
+          "package_name": "com.example.applistatarefas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAf_GC3urrM9YPeD5DRriYJpUoC_xIBHck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342834353974:android:7bcd473fff149cc1b90597",
+        "android_client_info": {
+          "package_name": "com.example.trabalho_pratica"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAf_GC3urrM9YPeD5DRriYJpUoC_xIBHck"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
