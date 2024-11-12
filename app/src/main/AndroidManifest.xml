@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- Permissão de Internet (se necessário para o Cardápio) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,15 +15,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Trabalho_pratica"
         tools:targetApi="31">
+
+        <!-- Main Activity com intent-filter para o launcher -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Cadastrar Activity -->
+        <activity
+            android:name=".CadastrarActivity"
+            android:exported="true" />
+
+        <!-- Esqueceu Senha Activity -->
+        <activity
+            android:name=".EsqueceuSenhaActivity"
+            android:exported="true" />
+
+        <!-- Cardápio Activity -->
+        <activity
+            android:name=".CardapioActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>
