@@ -1,8 +1,8 @@
 package com.example.trabalho_pratica
 
 data class CardapioItem(
-    val titulo: String = "",
+    val nome: String = "",
     val descricao: String = "",
-    val imagem: String = "", // URL da imagem
-    val preco: Double = 0.0
+    val preco: Double = 0.0,
+    val imagem: String = ""
 )

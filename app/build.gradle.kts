@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.firebase.firestore.ktx)
 
     implementation("com.github.bumptech.glide:glide:4.15.0")
+    implementation(libs.androidx.recyclerview)
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.0")
 
     testImplementation(libs.junit)

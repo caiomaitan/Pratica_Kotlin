@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.trabalho_pratica.databinding.ItemCardapioBinding
 
-class CardapioAdapter(private var cardapioList: List<CardapioItem>) :
-    RecyclerView.Adapter<CardapioAdapter.CardapioViewHolder>() {
+class CardapioAdapter(
+    private var cardapioList: List<CardapioItem>,
+    private val onAddToOrder: (CardapioItem) -> Unit
+) : RecyclerView.Adapter<CardapioAdapter.CardapioViewHolder>() {
 
     class CardapioViewHolder(val binding: ItemCardapioBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -18,23 +20,29 @@ class CardapioAdapter(private var cardapioList: List<CardapioItem>) :
 
     override fun onBindViewHolder(holder: CardapioViewHolder, position: Int) {
         val item = cardapioList[position]
-        holder.binding.txtTitulo.text = item.titulo
+
+        // Configura os campos corretamente
+        holder.binding.txtTitulo.text = item.nome  // Nome do produto
         holder.binding.txtDescricao.text = item.descricao
         holder.binding.txtPreco.text = "R$ ${item.preco}"
 
-        // Carregar imagem com Glide
+        // Carrega a imagem usando o Glide
         Glide.with(holder.itemView.context)
             .load(item.imagem)
             .into(holder.binding.imgItem)
+
+        // Configura o clique no botão de adicionar ao pedido
+        holder.binding.btnAdicionar.setOnClickListener {
+            onAddToOrder(item)
+        }
     }
 
-    override fun getItemCount(): Int {
-        return cardapioList.size
-    }
+    override fun getItemCount(): Int = cardapioList.size
 
-    // Método para atualizar a lista de itens
+    // Função para atualizar os itens do cardápio
     fun updateCardapioItems(newItems: List<CardapioItem>) {
         cardapioList = newItems
         notifyDataSetChanged()
     }
 }
+
