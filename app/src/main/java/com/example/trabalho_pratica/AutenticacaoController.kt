@@ -1,11 +1,17 @@
 import com.google.firebase.auth.FirebaseAuth
-
+import com.google.firebase.firestore.FirebaseFirestore
 import android.util.Log
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class AutenticacaoController {
 
+    private val firebaseAuth = FirebaseAuth.getInstance()
+    private val firestore = FirebaseFirestore.getInstance()
+
+    // Método para login
     fun login(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
-        val firebaseAuth = FirebaseAuth.getInstance()
         try {
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
@@ -22,13 +28,34 @@ class AutenticacaoController {
         }
     }
 
+    // Método para criar um novo usuário
     fun criarUsuario(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
-        val firebaseAuth = FirebaseAuth.getInstance()
         try {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        onResult(true, null)
+                        val userId = firebaseAuth.currentUser?.uid
+                        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                        val currentDate = dateFormat.format(Date())
+
+                        val userData = hashMapOf(
+                            "email" to email,
+                            "dataCriacao" to currentDate  // Armazena a data em formato legível
+                        )
+
+                        // Salva os dados do usuário no Firestore
+                        userId?.let {
+                            firestore.collection("usuarios").document(it)
+                                .set(userData)
+                                .addOnSuccessListener {
+                                    Log.d("AutenticacaoController", "Usuário salvo no Firestore com sucesso")
+                                    onResult(true, null)
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.e("AutenticacaoController", "Erro ao salvar usuário no Firestore", e)
+                                    onResult(false, "Erro ao salvar dados do usuário")
+                                }
+                        } ?: onResult(false, "Erro ao obter ID do usuário")
                     } else {
                         val errorMessage = task.exception?.message
                         onResult(false, errorMessage)
@@ -40,8 +67,8 @@ class AutenticacaoController {
         }
     }
 
+    // Método para redefinir senha
     fun esqueceuSenha(email: String, onResult: (Boolean, String?) -> Unit) {
-        val firebaseAuth = FirebaseAuth.getInstance()
         try {
             firebaseAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
@@ -58,8 +85,8 @@ class AutenticacaoController {
         }
     }
 
+    // Método para obter o email do usuário autenticado
     fun usuarioAutenticado(): String? {
-        val firebaseAuth = FirebaseAuth.getInstance()
         return try {
             firebaseAuth.currentUser?.email
         } catch (e: Exception) {
@@ -68,15 +95,12 @@ class AutenticacaoController {
         }
     }
 
+    // Método para realizar logout
     fun logout() {
         try {
-            FirebaseAuth.getInstance().signOut()
+            firebaseAuth.signOut()
         } catch (e: Exception) {
             Log.e("AutenticacaoController", "Erro ao fazer logout", e)
         }
-    }
-
-    fun idUsuarioAutenticado() {
-
     }
 }

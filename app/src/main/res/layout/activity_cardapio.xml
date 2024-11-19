@@ -5,6 +5,19 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Logout TextView -->
+    <TextView
+        android:id="@+id/txtLogout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        android:textSize="16sp"
+        android:textColor="@android:color/holo_red_dark"
+        android:layout_gravity="end"
+        android:padding="8dp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- RecyclerView for Cardapio -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCardapio"
         android:layout_width="match_parent"
@@ -16,8 +29,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="16dp"/>
+        android:layout_marginTop="16dp" />
 
+    <!-- Total TextView -->
     <TextView
         android:id="@+id/txtTotal"
         android:layout_width="wrap_content"
@@ -27,6 +41,7 @@
         android:textColor="#4CAF50"
         android:layout_marginTop="8dp" />
 
+    <!-- Comprar Button -->
     <Button
         android:id="@+id/btnComprar"
         android:layout_width="wrap_content"

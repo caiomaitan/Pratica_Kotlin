@@ -1,8 +1,9 @@
 package com.example.trabalho_pratica
 
+import AutenticacaoController
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -12,8 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.trabalho_pratica.databinding.ActivityCardapioBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
-
-
 class CardapioActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCardapioBinding
@@ -21,25 +20,36 @@ class CardapioActivity : AppCompatActivity() {
     private val firestore = FirebaseFirestore.getInstance()
     private val pedidoList = mutableListOf<CardapioItem>()
     private var totalPedido = 0.0
+    private lateinit var autenticacaoController: AutenticacaoController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCardapioBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Configura o RecyclerView
+        autenticacaoController = AutenticacaoController()
+
+        // Configura RecyclerView
         binding.rvCardapio.layoutManager = LinearLayoutManager(this)
         adapter = CardapioAdapter(emptyList()) { item ->
             adicionarAoPedido(item)
         }
         binding.rvCardapio.adapter = adapter
 
-        // Configura o botão de compra
+        // Configura botão de compra
         binding.btnComprar.setOnClickListener {
             realizarPedido()
         }
 
-        // Carrega os itens do cardápio
+        // Configura clique no TextView de Logout
+        binding.txtLogout.setOnClickListener {
+            autenticacaoController.logout()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        // Carrega itens do cardápio
         loadCardapioItems()
     }
 
@@ -56,10 +66,8 @@ class CardapioActivity : AppCompatActivity() {
     }
 
     private fun atualizarResumoPedido() {
-        // Limpa o resumo atual
         binding.llResumoPedido.removeAllViews()
 
-        // Exibe cada item com o nome, preço e botão de remoção
         pedidoList.forEach { item ->
             val itemLayout = LinearLayout(this).apply {
                 orientation = LinearLayout.HORIZONTAL
@@ -79,19 +87,14 @@ class CardapioActivity : AppCompatActivity() {
 
             itemLayout.addView(itemText)
             itemLayout.addView(btnRemover)
-
             binding.llResumoPedido.addView(itemLayout)
         }
 
-        // Atualiza o total
         binding.txtTotal.text = "Total: R$ %.2f".format(totalPedido)
     }
 
     private fun realizarPedido() {
-        // Mostra uma mensagem de confirmação
         Toast.makeText(this, "Pedido feito com sucesso!", Toast.LENGTH_LONG).show()
-
-        // Limpa o pedido
         pedidoList.clear()
         totalPedido = 0.0
         atualizarResumoPedido()
@@ -111,4 +114,3 @@ class CardapioActivity : AppCompatActivity() {
             }
     }
 }
-
