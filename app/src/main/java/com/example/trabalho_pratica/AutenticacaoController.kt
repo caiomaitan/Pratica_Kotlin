@@ -10,16 +10,33 @@ class AutenticacaoController {
     private val firebaseAuth = FirebaseAuth.getInstance()
     private val firestore = FirebaseFirestore.getInstance()
 
-    // Método para login
+
     fun login(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
         try {
+
             firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        onResult(true, null)
+                        val userId = firebaseAuth.currentUser?.uid
+                        if (userId != null) {
+
+                            firestore.collection("usuarios").document(userId)
+                                .get()
+                                .addOnSuccessListener { document ->
+                                    if (document.exists()) {
+                                        onResult(true, null) // Email encontrado no Firestore
+                                    } else {
+                                        onResult(false, "Email não encontrado no banco de dados")
+                                    }
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.e("AutenticacaoController", "Erro ao verificar email no Firestore", e)
+                                    onResult(false, "Erro ao verificar email no banco de dados")
+                                }
+                        }
                     } else {
                         val errorMessage = task.exception?.message
-                        onResult(false, errorMessage)
+                        onResult(false, errorMessage) // Caso o login falhe
                     }
                 }
         } catch (e: Exception) {
@@ -28,7 +45,7 @@ class AutenticacaoController {
         }
     }
 
-    // Método para criar um novo usuário
+
     fun criarUsuario(email: String, password: String, onResult: (Boolean, String?) -> Unit) {
         try {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
@@ -43,7 +60,7 @@ class AutenticacaoController {
                             "dataCriacao" to currentDate  // Armazena a data em formato legível
                         )
 
-                        // Salva os dados do usuário no Firestore
+
                         userId?.let {
                             firestore.collection("usuarios").document(it)
                                 .set(userData)
@@ -67,7 +84,7 @@ class AutenticacaoController {
         }
     }
 
-    // Método para redefinir senha
+
     fun esqueceuSenha(email: String, onResult: (Boolean, String?) -> Unit) {
         try {
             firebaseAuth.sendPasswordResetEmail(email)
@@ -85,7 +102,7 @@ class AutenticacaoController {
         }
     }
 
-    // Método para obter o email do usuário autenticado
+
     fun usuarioAutenticado(): String? {
         return try {
             firebaseAuth.currentUser?.email
@@ -95,7 +112,7 @@ class AutenticacaoController {
         }
     }
 
-    // Método para realizar logout
+
     fun logout() {
         try {
             firebaseAuth.signOut()

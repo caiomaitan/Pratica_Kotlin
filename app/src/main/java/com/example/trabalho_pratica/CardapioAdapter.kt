@@ -21,17 +21,17 @@ class CardapioAdapter(
     override fun onBindViewHolder(holder: CardapioViewHolder, position: Int) {
         val item = cardapioList[position]
 
-        // Configura os campos corretamente
-        holder.binding.txtTitulo.text = item.nome  // Nome do produto
+
+        holder.binding.txtTitulo.text = item.nome
         holder.binding.txtDescricao.text = item.descricao
         holder.binding.txtPreco.text = "R$ ${item.preco}"
 
-        // Carrega a imagem usando o Glide
+
         Glide.with(holder.itemView.context)
             .load(item.imagem)
             .into(holder.binding.imgItem)
 
-        // Configura o clique no botão de adicionar ao pedido
+
         holder.binding.btnAdicionar.setOnClickListener {
             onAddToOrder(item)
         }
@@ -39,7 +39,7 @@ class CardapioAdapter(
 
     override fun getItemCount(): Int = cardapioList.size
 
-    // Função para atualizar os itens do cardápio
+
     fun updateCardapioItems(newItems: List<CardapioItem>) {
         cardapioList = newItems
         notifyDataSetChanged()

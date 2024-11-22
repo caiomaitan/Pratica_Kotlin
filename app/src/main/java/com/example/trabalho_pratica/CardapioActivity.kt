@@ -29,19 +29,19 @@ class CardapioActivity : AppCompatActivity() {
 
         autenticacaoController = AutenticacaoController()
 
-        // Configura RecyclerView
+
         binding.rvCardapio.layoutManager = LinearLayoutManager(this)
         adapter = CardapioAdapter(emptyList()) { item ->
             adicionarAoPedido(item)
         }
         binding.rvCardapio.adapter = adapter
 
-        // Configura botão de compra
+
         binding.btnComprar.setOnClickListener {
             realizarPedido()
         }
 
-        // Configura clique no TextView de Logout
+
         binding.txtLogout.setOnClickListener {
             autenticacaoController.logout()
             val intent = Intent(this, MainActivity::class.java)
@@ -49,7 +49,7 @@ class CardapioActivity : AppCompatActivity() {
             finish()
         }
 
-        // Carrega itens do cardápio
+       
         loadCardapioItems()
     }
 

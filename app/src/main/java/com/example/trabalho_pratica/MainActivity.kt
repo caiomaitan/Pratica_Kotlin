@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.trabalho_pratica.databinding.ActivityMainBinding
 
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var ctrl: AutenticacaoController
@@ -25,12 +24,13 @@ class MainActivity : AppCompatActivity() {
             val senha = binding.txtSenha.text.toString()
 
             try {
+
                 ctrl.login(email, senha) { sucesso, erro ->
                     if (sucesso) {
-                        // Após o login bem-sucedido, navega para a CardapioActivity
+
                         val intent = Intent(this, CardapioActivity::class.java)
                         startActivity(intent)
-                        finish()  // Para evitar voltar para a tela de login
+                        finish()
                     } else {
                         val errorMessage = erro ?: "Erro desconhecido"
                         Toast.makeText(this, "Erro no login: $errorMessage", Toast.LENGTH_LONG).show()
